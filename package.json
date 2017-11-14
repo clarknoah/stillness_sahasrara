@@ -1,0 +1,23 @@
+{
+  "name": "stillness_sahasrara",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clarknoah/stillness_sahasrara.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clarknoah/stillness_sahasrara/issues"
+  },
+  "homepage": "https://github.com/clarknoah/stillness_sahasrara#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "neo4j-driver": "^1.5.0"
+  }
+}
