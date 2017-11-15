@@ -5,25 +5,21 @@ const app = express()
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.get('/getConceptList', (req, res) => {
+app.get('/getConceptList', function(req, res){
 
   var driver = neo4j.driver("bolt://localhost",neo4j.auth.basic("neo4j","stillness"));
   var session = driver.session();
   session
     .run('MATCH (c:Concept) RETURN c.label_name')
-    .subscribe({
-      onNext: function(record, res){
-      //  console.log(record);
-        console.log(record.get('c.label_name'));
-        var bob = record.get('c.label_name');
-        console.log(bob);
-          res.send(bob);
-      },
-      onCompleted: function(){
-        driver.close();
-        }
-
+    .then(function(result){
+      console.log(result.records[0]);
+      var bob = result.records[0];
+      console.log(bob);
+              res.send(bob);
     })
+    .catch(function(err){
+      console.log(err);
+    });
 });
 
 
