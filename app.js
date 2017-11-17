@@ -1,6 +1,6 @@
 const express = require('express')
 var reload = require('reload');
-
+var routes = require('./routes');
 var neo4j = require('neo4j-driver').v1;
 
 const app = express()
@@ -17,8 +17,8 @@ app.get('/getConceptList', function(req, res){
   };
   var session = driver.session();
   session
-    .run('MATCH (c:'+requestVars.concept_label+')' +
-    '  RETURN id(c) as id ,c.'+requestVars.qualia_field_name + ' as display_value')
+    .run( 'MATCH (c:'+requestVars.concept_label+')' +
+          'RETURN id(c) as id ,c.'+requestVars.qualia_field_name + ' as display_value')
     .then(function(result){
       session.close();
       var returnList = [];
