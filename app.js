@@ -1,10 +1,8 @@
 const express = require('express')
 var reload = require('reload');
 var routes = require('./routes');
-var neo4j = require('neo4j-driver').v1;
-
+var db = require('./neo4j/dbUtils');
 const app = express()
-var driver = neo4j.driver("bolt://localhost",neo4j.auth.basic("neo4j","stillness"));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
@@ -15,7 +13,7 @@ app.get('/getConceptList', function(req, res){
     concept_label: 'Concept',
     qualia_field_name: 'label_name'
   };
-  var session = driver.session();
+  var session = db.getSession();
   session
     .run( 'MATCH (c:'+requestVars.concept_label+')' +
           'RETURN id(c) as id ,c.'+requestVars.qualia_field_name + ' as display_value')
@@ -46,7 +44,7 @@ app.get('/getConceptQualiaList', function(req, res){
     concept_label: 'Concept',
     qualia_field_name: 'label_name'
   };
-  var session = driver.session();
+    var session = db.getSession();
   session
     .run( 'MATCH (c:'+requestVars.concept_label+')-[]->(q:Qualia)' +
           'WHERE (c).label_name="'+requestVars.concept_label+'" ' +
@@ -64,8 +62,30 @@ app.get('/getConceptQualiaList', function(req, res){
     });
 });
 
-app.get('/getConceptForm', function(req,res){
+app.get('/getConceptForm',function(req,res){
+  var requestVars = {
+    concept_label: 'Concept',
+    qualia_field_name: 'label_name'
+  };
+  var session = db.getSession(session);
+  session
+    .run( 'MATCH (c:'+requestVars.concept_label+')-[:accepted_qualia]->(q:Qualia)' +
+          'WHERE (c).label_name="'+requestVars.concept_label+'" ' +
+          'RETURN collect(properties(q)) as qualiaProperties')
+    .then(function(result){
+      var unformatted_qualias = result.records[0]._fields[0];
+        var concept = {
+          concept_label: requestVars.concept_label,
+          qualias:[]
+        };
 
+      var formatted_qualias = db.formatQualias(unformatted_qualias);
+      concept.qualia.push(formatted_qualias);
+
+    })
+    .catch(function(err){
+      console.log(err);
+    });
 })
 
 app.get('/submitFormPayload', function(req,res){

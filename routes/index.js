@@ -1,3 +1,4 @@
 'use strict'
 
-exports.getConceptList= require('./getConceptQualias.js');
+exports.getConceptList = require('./getConceptQualias');
+exports.getConceptForm = require('./getConceptForm');
