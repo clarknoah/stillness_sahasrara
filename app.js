@@ -1,10 +1,15 @@
+"use strict";
+
 const express = require('express')
 var reload = require('reload');
 var routes = require('./routes');
+var models = require('./models');
 var db = require('./neo4j/dbUtils');
 var moment = require('moment');
 var bodyParser = require('body-parser');
 const app = express();
+
+models.qualiaForms.loadForms();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -16,6 +21,14 @@ var currentUser = {
   id:175
 };
 
+class Frank {
+
+  constructor(){
+    this.name = "Frank";
+    console.log(`Hi, my name is ${this.name}`)
+  }
+}
+var frank = new Frank();
 
 
 function getNeo4jTimestamp(){
@@ -57,6 +70,41 @@ function generateLoadVariables(variableArray){
   }else{
     return "";
   }
+
+}
+
+function generateConceptQualiaQuery(conceptLabel){
+  return `MATCH (n:${conceptLabel})-[:approved_qualia]->(q:Qualia)
+          RETURN DISTINCT collect({
+          db_name:q.db_name,
+          eq_type: "qualia",
+          data_type: q.data_type,
+          current_value: null,
+          default_value: q.default_value,
+          updated_value: null,
+          placeholder: q.display_name})`;
+
+}
+
+function generateQualiaFields(conceptLabel){
+  var session = db.getSession();
+
+  session
+    .run(generateConceptQualiaQuery(conceptLabel))
+    .then(function(result){
+      return result.records[0]._fields;
+    })
+    .catch();
+}
+
+getConceptForm('Concept');
+
+function getConceptForm(conceptLabel){
+  var newConcept = {
+    concept_label:conceptLabel,
+    qualias:generateQualiaFields(conceptLabel)
+  };
+  console.log(newConcept);
 
 }
 
@@ -158,26 +206,15 @@ app.get('/getConceptForm',function(req,res){
     concept_label: 'Concept',
     qualia_field_name: 'label_name'
   };
-  var session = db.getSession(session);
-  session
-    .run( 'MATCH (c:'+requestVars.concept_label+')-[:accepted_qualia]->(q:Qualia)' +
-          'WHERE (c).label_name="'+requestVars.concept_label+'" ' +
-          'RETURN collect(properties(q)) as qualiaProperties')
-    .then(function(result){
-      var unformatted_qualias = result.records[0]._fields[0];
         var concept = {
           concept_label: requestVars.concept_label,
-          qualias:[]
+          qualias:this.generateQualiaFields(requestVars.concept_label)
         };
 
       var formatted_qualias = db.formatQualias(unformatted_qualias);
       concept.qualia.push(formatted_qualias);
 
     })
-    .catch(function(err){
-      console.log(err);
-    });
-})
 
 app.post('/submitFormPayload', function(req,res){
   var session = db.getSession();
