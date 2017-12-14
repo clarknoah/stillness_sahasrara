@@ -52,7 +52,12 @@ function generateLoadVariables(variableArray){
   generatedMatchStatement = matchStatement + collectionOfVariables.toString() + ' \n ';
   generatedWhereStatement = whereStatement + collectionOfWhereStatements.join(' AND ');
 
-  return generatedMatchStatement + generatedWhereStatement;
+  if(variableArray.length > 0){
+    return generatedMatchStatement + generatedWhereStatement;
+  }else{
+    return "";
+  }
+
 }
 
 function generateCreateConcepts(createArray){
@@ -63,7 +68,12 @@ function generateCreateConcepts(createArray){
     formattedCreateStatement = `CREATE (${create.key}:${create.label} ${stringify(create.qualias)}) \n`;
     collectionOfCreateStatements.push(formattedCreateStatement);
   }
-  return collectionOfCreateStatements.join("");
+  if(createArray.length > 0){
+    return collectionOfCreateStatements.join("");
+  }else{
+    return "";
+  }
+
 }
 
 function generateEntanglements(entanglementsArray){
@@ -74,8 +84,12 @@ function generateEntanglements(entanglementsArray){
     formattedEntanglementStatement = `CREATE (${create.source_key})-[:${create.db_name}]->(${create.target_key}) \n`;
     collectionOfEntanglements.push(formattedEntanglementStatement);
   }
-
+  if(entanglementsArray.length > 0){
     return collectionOfEntanglements.join("");
+  }else{
+    return "";
+  }
+
 }
 
 function compileDatabaseQuery(query){
@@ -167,7 +181,6 @@ app.get('/getConceptForm',function(req,res){
 
 app.post('/submitFormPayload', function(req,res){
   var session = db.getSession();
-  console.log("1234 OH NO");
   console.log(compileDatabaseQuery(req.body));
   session
     .run(compileDatabaseQuery(req.body))
@@ -182,7 +195,9 @@ app.post('/submitFormPayload', function(req,res){
 
 })
 
-
+app.post('/mockSubmitFormPayload', function(req,res){
+  console.log(compileDatabaseQuery(req.body));
+});
 
 
 reload(app);
