@@ -1,0 +1,23 @@
+//Deletes Entire Database!!!!!
+
+MATCH(n:)-[:b]-()
+DELETE n,b
+
+***** Deletes Existing Schema *****
+
+MATCH (n:Concept)-[e]->(q:?)
+DELETE n, e, q;
+
+
+MATCH (n:Concept)
+DELETE n
+
+
+***** Get the Qualia Approved Properties *****
+
+MATCH (q:Concept{label_name:'Qualia'})-[:approved_qualia]->(qq:Qualia)
+RETURN DISTINCT collect(qq)
+
+***** Get all Database Concepts *****
+MATCH (c:Concept)
+RETURN DISTINCT collect(c.label_name)

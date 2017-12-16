@@ -19,9 +19,8 @@ CREATE (entanglement:Concept {
 					number:42
 					})
 
-
 CREATE (s_label_name:Qualia{
-					qualia_db_key:'label_name',
+					db_key:'label_name',
 					display_name:'Label Name',
 					is_edittable:true,
 					mandatory_field:true,
@@ -36,7 +35,7 @@ CREATE (s_label_name:Qualia{
 					})
 
 CREATE (s_description:Qualia{
-					qualia_db_key:'description',
+					db_key:'description',
 					display_name:'Node Description',
 					is_edittable:true,
 					mandatory_field:true,
@@ -49,8 +48,9 @@ CREATE (s_description:Qualia{
 					data_type:'text',
 					default_value:"null"
 					})
+
 CREATE (s_number:Qualia{
-					qualia_db_key:'number',
+					db_key:'number',
 					display_name:'Number',
 					is_edittable:true,
 					mandatory_field:true,
@@ -61,11 +61,11 @@ CREATE (s_number:Qualia{
 					select_options:[],
 					field_order:2,
 					data_type:'number',
-					default_value:44
+					default_value:'null'
 					})
 
-CREATE (p_qualia_db_name:Qualia{
-					qualia_db_key:'qualia_db_key',
+CREATE (p_db_key:Qualia{
+					db_key:'db_key',
 					display_name:'Qualia Database Key',
 					is_edittable:true,
 					mandatory_field:true,
@@ -80,7 +80,7 @@ CREATE (p_qualia_db_name:Qualia{
 					})
 
 CREATE (p_display_name:Qualia{
-					qualia_db_key:'display_name',
+					db_key:'display_name',
 					display_name:'Display Name',
 					is_edittable:true,
 					mandatory_field:true,
@@ -95,7 +95,7 @@ CREATE (p_display_name:Qualia{
 					})
 
 CREATE (p_is_edittable:Qualia{
-					qualia_db_key:'is_edittable',
+					db_key:'is_edittable',
 					display_name:'Edittable?',
 					is_edittable:true,
 					mandatory_field:true,
@@ -110,7 +110,7 @@ CREATE (p_is_edittable:Qualia{
 					})
 
 CREATE (p_mandatory_field:Qualia{
-					qualia_db_key:'mandatory_field',
+					db_key:'mandatory_field',
 					display_name:'Mandatory Field?',
 					is_edittable:true,
 					mandatory_field:true,
@@ -125,7 +125,7 @@ CREATE (p_mandatory_field:Qualia{
 					})
 
 CREATE (p_has_multiple_values:Qualia{
-					qualia_db_key:'has_multiple_values',
+					db_key:'has_multiple_values',
 					display_name:'Multiple Values?',
 					is_edittable:true,
 					mandatory_field:true,
@@ -140,7 +140,7 @@ CREATE (p_has_multiple_values:Qualia{
 					})
 
 CREATE (p_select_options:Qualia{
-					qualia_db_key:'select_options',
+					db_key:'select_options',
 					display_name:'Select Options',
 					is_edittable:true,
 					mandatory_field:false,
@@ -155,7 +155,7 @@ CREATE (p_select_options:Qualia{
 					})
 
 CREATE (p_field_order:Qualia{
-					qualia_db_key:'field_order',
+					db_key:'field_order',
 					display_name:'Field Order',
 					is_edittable:true,
 					mandatory_field:true,
@@ -170,7 +170,7 @@ CREATE (p_field_order:Qualia{
 					})
 
 CREATE (p_data_type:Qualia{
-					qualia_db_key:'data_type',
+					db_key:'data_type',
 					display_name:'Data Type',
 					is_edittable:true,
 					mandatory_field:true,
@@ -185,7 +185,7 @@ CREATE (p_data_type:Qualia{
 					})
 
 CREATE (p_default_value:Qualia{
-					qualia_db_key:'default_value',
+					db_key:'default_value',
 					display_name:'Default Value',
 					is_edittable:true,
 					mandatory_field:false,
@@ -199,15 +199,15 @@ CREATE (p_default_value:Qualia{
 					default_value:'null'
 					})
 
-CREATE (p_qualia_db_key)<-[:approved_property]-(qualia),
-	(p_display_name)<-[:approved_property]-(qualia),
-	(p_is_edittable)<-[:approved_property]-(qualia),
-	(p_mandatory_field)<-[:approved_property]-(qualia),
-	(p_has_multiple_values)<-[:approved_property]-(qualia),
-	(p_select_options)<-[:approved_property]-(qualia),
-	(p_field_order)<-[:approved_property]-(qualia),
-	(p_data_type)<-[:approved_property]-(qualia),
-	(p_default_value)<-[:approved_property]-(qualia),
-	(s_label_name)<-[:approved_property]-(concept),
-	(s_description)<-[:approved_property]-(concept),
-	(s_number)<-[:approved_property]-(concept);
+CREATE (p_db_key)<-[:approved_qualia]-(qualia),
+	(p_display_name)<-[:approved_qualia]-(qualia),
+	(p_is_edittable)<-[:approved_qualia]-(qualia),
+	(p_mandatory_field)<-[:approved_qualia]-(qualia),
+	(p_has_multiple_values)<-[:approved_qualia]-(qualia),
+	(p_select_options)<-[:approved_qualia]-(qualia),
+	(p_field_order)<-[:approved_qualia]-(qualia),
+	(p_data_type)<-[:approved_qualia]-(qualia),
+	(p_default_value)<-[:approved_qualia]-(qualia),
+	(s_label_name)<-[:approved_qualia]-(concept),
+	(s_description)<-[:approved_qualia]-(concept),
+	(s_number)<-[:approved_qualia]-(concept);
