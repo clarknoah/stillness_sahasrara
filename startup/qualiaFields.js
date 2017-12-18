@@ -3,6 +3,8 @@ var db = require('../neo4j/dbUtils');
 var utils = require('../utils');
 var Type = require('type-of-is');
 
+exports.conceptForms = {};
+
 exports.getCentralDogmaQualias = function() {
   var session = db.getSession();
   session.run(`MATCH (q:Concept{label_name:'Qualia'})-[:approved_qualia]->(qq:Qualia)
@@ -28,7 +30,8 @@ exports.getCentralDogmaLabels = function() {
 exports.getConceptQualias = function(conceptLabel) {
   var session = db.getSession();
   session.run(`MATCH (q:Concept{label_name:'${conceptLabel}'})-[:approved_qualia]->(qq:Qualia)
-      RETURN DISTINCT collect(qq)`).then(function(result) {
+      RETURN DISTINCT collect(qq)`)
+      .then(function(result) {
     session.close();
     //console.log(result.records[0]._fields[0]);
     exports.conceptForms[conceptLabel].qualias = parseQualiasIntoArray(result.records[0]._fields[0]);
@@ -40,6 +43,63 @@ exports.getConceptQualias = function(conceptLabel) {
   }).catch(function(err) {
     console.log(err);
   })
+}
+
+exports.getTargetConceptEntanglements = function(conceptLabel,creator){
+  var session = db.getSession();
+  session.run(
+    `MATCH (source:Concept)<-[:source_concept]-(e:Entanglement)-[:target_concept]->(target:Concept {label_name:'${conceptLabel}'})
+    WHERE e.creator = 'target'
+    RETURN collect({
+    db_type:e.db_type,
+    cardinality:e.cardinality,
+    creator:e.creator,
+    source_concept:source.label_name,
+    target_concept:target.label_name,
+    target_key:null,
+    source_key:null})`)
+    .then(function(result){
+      session.close();
+      if(result.records[0]._fields[0].length>0){
+        for(var i in result.records[0]._fields[0]){
+          var entanglement = result.records[0]._fields[0][i];
+          exports.conceptForms[conceptLabel].entanglements.push(entanglement);
+          console.log("This is the new entanglement I'm adding \n \n ");
+          console.log(entanglement);
+        }
+      }
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+}
+exports.getSourceConceptEntanglements = function(conceptLabel,creator){
+  var session = db.getSession();
+  session.run(
+    `MATCH (source:Concept {label_name:'${conceptLabel}'})<-[:source_concept]-(e:Entanglement)-[:target_concept]->(target:Concept)
+    WHERE e.creator = 'source'
+    RETURN collect({
+    db_type:e.db_type,
+    cardinality:e.cardinality,
+    creator:e.creator,
+    source_concept:source.label_name,
+    target_concept:target.label_name,
+    target_key:null,
+    source_key:null})`)
+    .then(function(result){
+      session.close();
+      if(result.records[0]._fields[0].length>0){
+        for(var i in result.records[0]._fields[0]){
+          var entanglement = result.records[0]._fields[0][i];
+          exports.conceptForms[conceptLabel].entanglements.push(entanglement);
+          console.log("This is the new entanglement I'm adding \n \n ");
+          console.log(entanglement);
+        }
+      }
+    })
+    .catch(function(err){
+      console.log(err);
+    })
 }
 
 function parseQualiasIntoArray(results){
@@ -217,7 +277,7 @@ exports.getQualiaField = function() {
   };
 }
 
-exports.conceptForms = {};
+
 
 function assignLabels(labels){
   exports.labels = labels;
@@ -226,11 +286,14 @@ function assignLabels(labels){
     exports.conceptForms[label] = {
       label_name:label,
       key:null,
-      qualias:[]
+      qualias:[],
+      entanglements:[]
     };
   }
   for(var conceptLabel in exports.conceptForms){
     exports.getConceptQualias(conceptLabel);
+   exports.getTargetConceptEntanglements(conceptLabel);
+   exports.getSourceConceptEntanglements(conceptLabel);
   }
   //console.log(exports.conceptForms);
 }

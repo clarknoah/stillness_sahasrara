@@ -27,7 +27,7 @@ exports.generateLoadVariables = function (variableArray){
   var collectionOfVariables = [];
   var collectionOfWhereStatements = [];
 
-  for(index in variableArray){
+  for(var index in variableArray){
     var concept = variableArray[index];
     var formattedVariable = `(${concept.key})`;
     var formattedWhereStatement = `ID(${concept.key})=${concept.id}`
@@ -77,7 +77,7 @@ exports.generateCreateConcepts = function (createArray){
 exports.generateEntanglements= function (entanglementsArray){
   var collectionOfEntanglements = [];
 
-  for(index in entanglementsArray){
+  for(var index in entanglementsArray){
     var create = entanglementsArray[index];
     var formattedEntanglementStatement = `CREATE (${create.source_key})-[:${create.db_name}]->(${create.target_key}) \n`;
     collectionOfEntanglements.push(formattedEntanglementStatement);
@@ -88,6 +88,16 @@ exports.generateEntanglements= function (entanglementsArray){
     return "";
   }
 
+}
+
+exports.generateGuid = function(){
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return 'var_'+ s4() + s4() + '_' + s4() + '_' + s4() + '_' +
+    s4() + '_' + s4() + s4() + s4();
 }
 
 exports.compileDatabaseQuery = function (query){

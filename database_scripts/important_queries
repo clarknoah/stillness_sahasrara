@@ -5,7 +5,7 @@ DELETE n,b
 
 ***** Deletes Existing Schema *****
 
-MATCH (n:Concept)-[e]->(q:?)
+MATCH (n:Concept)-[e]->(q)
 DELETE n, e, q;
 
 
@@ -21,3 +21,14 @@ RETURN DISTINCT collect(qq)
 ***** Get all Database Concepts *****
 MATCH (c:Concept)
 RETURN DISTINCT collect(c.label_name)
+
+
+***** Matches the entire Entanglement Form *****
+
+MATCH (source:Concept)<-[:source_concept]-(e:Entanglement)-[:target_concept]->(target:Concept)
+RETURN collect({
+  type:e.db_type,
+  cardinality:e.cardinality,
+  creator:e.creator,
+  source:source.label_name,
+  target:target.label_name})
