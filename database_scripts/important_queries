@@ -5,7 +5,7 @@ DELETE n,b
 
 ***** Deletes Existing Schema *****
 
-MATCH (n:Concept)-[e]->(q)
+MATCH (n:Concept)-[e]-(q)
 DELETE n, e, q;
 
 

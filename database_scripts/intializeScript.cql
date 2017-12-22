@@ -1,6 +1,7 @@
 //Encapsulate Concept Creation
 	CREATE (concept:Concept {
 						label_name:'Concept',
+						display_name:'Concept',
 						description:'Concept',
 						number:44
 						})
@@ -8,41 +9,47 @@
 
 	CREATE (qualia:Concept {
 						label_name:'Qualia',
+						display_name:'Qualia',
 						description:'Qualia',
 						number:22
 						})
 
 	CREATE (entanglement:Concept {
 						label_name:'Entanglement',
+						display_name:'Entanglement',
 						description:'Entanglement',
 						number:42
 						})
 
 	CREATE (meditation_type:Concept {
 						label_name:'Meditation_Type',
+						display_name:'Meditation_Type',
 						description:'Stores the Type of Meditation',
 						number:44
 						})
 
 	CREATE (meditation_instance:Concept {
 						label_name:'Meditation_Instance',
+						display_name:'Meditation_Instance',
 						description:'Instance of a Meditation Type',
 						number:44
 						})
 
 	CREATE (experience:Concept {
 						label_name:'Experience',
+						display_name:'Experience',
 						description:'Instance of experience',
 						number:44
 						})
 
 	CREATE (perception:Concept {
 						label_name:'Perception',
+						display_name:'Perception',
 						description:'Type of Perception',
 						number:44
 						})
 
-//Encasulates Create Qualia
+//Display Names
 
 	CREATE (met_display_name:Qualia{
 		db_key:'display_name',
@@ -119,6 +126,23 @@
 						default_value:"null"
 						})
 
+
+CREATE (s_display_name:Qualia{
+					db_key:'display_name',
+					display_name:'Display Name',
+					is_edittable:true,
+					mandatory_field:true,
+					has_multiple_values:false,
+					hint:'',
+					placeholder:'',
+					eq_type:'qualia',
+					select_options:[],
+					field_order:1,
+					data_type:'text',
+					default_value:"null"
+					})
+
+
 	CREATE (s_description:Qualia{
 						db_key:'description',
 						display_name:'Node Description',
@@ -148,7 +172,7 @@
 						data_type:'number',
 						default_value:'null'
 						})
-
+// Qualia Qualias
 	CREATE (p_db_key:Qualia{
 						db_key:'db_key',
 						display_name:'Qualia Database Key',
@@ -263,7 +287,7 @@
 						hint:'',
 						placeholder:'',
 						eq_type:'qualia',
-						select_options:['text','textarea','number','date','boolean','text-array'],
+						select_options:['text','textarea','number','date','boolean','text-array','text-select'],
 						field_order:8,
 						data_type:'text',
 						default_value:'text'

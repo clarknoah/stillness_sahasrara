@@ -52,6 +52,7 @@ exports.getTargetConceptEntanglements = function(conceptLabel,creator){
     WHERE e.creator = 'target'
     RETURN collect({
     db_type:e.db_type,
+    display_name:e.display_name,
     cardinality:e.cardinality,
     creator:e.creator,
     source_concept:source.label_name,
@@ -82,6 +83,7 @@ exports.getSourceConceptEntanglements = function(conceptLabel,creator){
     db_type:e.db_type,
     cardinality:e.cardinality,
     creator:e.creator,
+    display_name:e.display_name,
     source_concept:source.label_name,
     target_concept:target.label_name,
     target_key:null,
