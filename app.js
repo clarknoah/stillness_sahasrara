@@ -72,6 +72,31 @@ app.post('/getNewConceptForm',function(req,res){
       res.send(conceptForm);
     })
 app.post('/getExistingConceptForm',function(req,res){
+      console.log(req.body);
+      var session = db.getSession();
+      session
+        .run(`MATCH (n) WHERE ID(n)=${req.body.id} RETURN n`)
+        .then(function(result){
+            session.close();
+            console.log(result.records[0]);
+            var concept = result.records[0]._fields[0];
+            var templateConcept = model.conceptForms[concept.labels[0]];
+            console.log(templateConcept);
+            for(var qualiaKey in concept.properties){
+              console.log(qualiaKey);
+              var qualiaIndex = utils.findElementIndex(
+                templateConcept.qualias,
+                qualiaKey
+              );
+              console.log(qualiaIndex);
+
+             templateConcept.qualias[qualiaIndex]
+             .current_value = concept.properties[qualiaKey];
+            } 
+            templateConcept.id = concept.identity.low;
+            res.send(templateConcept);
+        }
+        )
 
     })
 

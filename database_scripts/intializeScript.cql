@@ -443,6 +443,7 @@ CREATE (s_display_name:Qualia{
 		(s_label_name)<-[:approved_qualia]-(concept),
 		(s_description)<-[:approved_qualia]-(concept),
 		(s_number)<-[:approved_qualia]-(concept),
+		(s_display_name)<-[:approved_qualia]-(concept),
 		(e_db_type)<-[:approved_qualia]-(entanglement),
 		(e_display_name)<-[:approved_qualia]-(entanglement),
 		(e_cardinality)<-[:approved_qualia]-(entanglement),

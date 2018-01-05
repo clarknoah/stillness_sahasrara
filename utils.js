@@ -13,3 +13,11 @@ exports.stringify = function(obj_from_json){
         .join(",");
     return `{${props}}`;
 }
+
+exports.findElementIndex = function(array, key){
+  for(var x in array){
+    if(array[x]['db_key'] === key){
+      return x;
+    }
+  }
+}
