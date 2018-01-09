@@ -71,6 +71,7 @@ app.post('/getNewConceptForm',function(req,res){
       var conceptForm = model.conceptForms[conceptLabel];
       res.send(conceptForm);
     })
+
 app.post('/getExistingConceptForm',function(req,res){
       console.log(req.body);
       var session = db.getSession();
@@ -92,7 +93,7 @@ app.post('/getExistingConceptForm',function(req,res){
 
              templateConcept.qualias[qualiaIndex]
              .current_value = concept.properties[qualiaKey];
-            } 
+            }
             templateConcept.id = concept.identity.low;
             res.send(templateConcept);
         }
@@ -122,6 +123,45 @@ app.post('/submitFormPayload', function(req,res){
 app.post('/mockSubmitFormPayload', function(req,res){
   console.log(db.compileDatabaseQuery(req.body));
 });
+
+app.post('/getCentralDogmaConceptQualias', function(req,res){
+  var session = db.getSession();
+  session
+      .run(`MATCH (n)-[:approved_qualia]->(q:Qualia)
+      WHERE ID(n)=${req.body.id}
+      RETURN collect(distinct {id:ID(q),display_name:q.display_name})`)
+      .then(function(results){
+        session.close();
+        console.log(results[0]);
+        var returnArray = results.records[0]._fields[0];
+        res.send(returnArray);
+      })
+      .catch(function(err){
+        console.log(err);
+      }
+      )
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 reload(app);
