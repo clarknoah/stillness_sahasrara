@@ -37,7 +37,6 @@ app.post('/getConceptList', function(req, res){
     .then(function(result){
       session.close();
       var returnList = [];
-  console.log(result.records[0]._fields);
 
     res.send(result.records[0]._fields[0]);
     })
@@ -58,7 +57,7 @@ app.post('/getConceptQualiaList', function(req, res){
         var concept = {};
       concept.properties = result.records[0]._fields[0]
 
-  console.log(concept.properties);
+
   //console.log(JSON.stringify(result.records[0]._fields[0]));
     })
     .catch(function(err){
@@ -71,6 +70,45 @@ app.post('/getNewConceptForm',function(req,res){
       var conceptForm = model.conceptForms[conceptLabel];
       res.send(conceptForm);
     })
+
+
+
+app.post('/submitFormPayload', function(req,res){
+  var session = db.getSession();
+  console.log(db.compileDatabaseQuery(req.body));
+  session
+    .run(db.compileDatabaseQuery(req.body))
+    .then(function(result){
+      session.close();
+    //  console.log(result);
+      res.send(result)
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+})
+
+app.post('/mockSubmitFormPayload', function(req,res){
+  console.log(db.compileDatabaseQuery(req.body));
+});
+
+app.post('/getCentralDogmaConceptQualias', function(req,res){
+  var session = db.getSession();
+  session
+      .run(`MATCH (n)-[:approved_qualia]->(q:Qualia)
+      WHERE ID(n)=${req.body.id}
+      RETURN collect(distinct {id:ID(q),display_name:q.display_name})`)
+      .then(function(results){
+        session.close();
+        var returnArray = results.records[0]._fields[0];
+        res.send(returnArray);
+      })
+      .catch(function(err){
+        console.log(err);
+      }
+      )
+})
 
 app.post('/getExistingConceptForm',function(req,res){
       console.log(req.body);
@@ -100,49 +138,6 @@ app.post('/getExistingConceptForm',function(req,res){
         )
 
     })
-
-app.post('/submitFormPayload', function(req,res){
-  var session = db.getSession();
-  console.log("OK I SEE");
-  console.log(db.compileDatabaseQuery(req.body));
-  console.log("wtf");
-  session
-    .run(db.compileDatabaseQuery(req.body))
-    .then(function(result){
-      session.close();
-    //  console.log(result);
-      res.send(result);
-      console.log("Submitted");
-    })
-    .catch(function(err){
-      console.log(err);
-    })
-
-})
-
-app.post('/mockSubmitFormPayload', function(req,res){
-  console.log(db.compileDatabaseQuery(req.body));
-});
-
-app.post('/getCentralDogmaConceptQualias', function(req,res){
-  var session = db.getSession();
-  session
-      .run(`MATCH (n)-[:approved_qualia]->(q:Qualia)
-      WHERE ID(n)=${req.body.id}
-      RETURN collect(distinct {id:ID(q),display_name:q.display_name})`)
-      .then(function(results){
-        session.close();
-        console.log(results[0]);
-        var returnArray = results.records[0]._fields[0];
-        res.send(returnArray);
-      })
-      .catch(function(err){
-        console.log(err);
-      }
-      )
-})
-
-
 
 
 

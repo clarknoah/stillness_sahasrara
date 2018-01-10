@@ -10,7 +10,6 @@ exports.getCentralDogmaQualias = function() {
   session.run(`MATCH (q:Concept{label_name:'Qualia'})-[:approved_qualia]->(qq:Qualia)
       RETURN DISTINCT collect(qq)`).then(function(result) {
     session.close();
-    //console.log(result.records[0]._fields[0]);
   }).catch(function(err) {
     console.log(err);
   })
@@ -65,8 +64,6 @@ exports.getTargetConceptEntanglements = function(conceptLabel,creator){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
-          console.log("This is the new entanglement I'm adding \n \n ");
-          console.log(entanglement);
         }
       }
     })
@@ -94,8 +91,6 @@ exports.getSourceConceptEntanglements = function(conceptLabel,creator){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
-          console.log("This is the new entanglement I'm adding \n \n ");
-          console.log(entanglement);
         }
       }
     })
