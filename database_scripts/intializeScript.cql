@@ -385,12 +385,6 @@ CREATE (s_display_name:Qualia{
 		creator:'source'
 		})
 
-	CREATE (et_approved_entanglement:Entanglement{
-		db_type:'approved_entanglement',
-		display_name:'Entanglement',
-		cardinality:'one-to-one',
-		creator:'source'
-		})
 
 	CREATE (et_instance_of:Entanglement{
 		db_type:'instance_of',
@@ -424,8 +418,6 @@ CREATE (s_display_name:Qualia{
 	(et_best_maps_to)-[:target_concept]->(perception),
 	(et_best_maps_to)-[:source_concept]->(experience),
 	(et_target)<-[:approved_entanglement]-(entanglement),
-	(et_approved_entanglement)-[:target_concept]->(entanglement),
-	(et_approved_entanglement)-[:source_concept]->(concept),
 	(entanglement)<-[:source_concept]-(et_source),
 	(concept)<-[:target_concept]-(et_source),
 	(entanglement)<-[:source_concept]-(et_target),
