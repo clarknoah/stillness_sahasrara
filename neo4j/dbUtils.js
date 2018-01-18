@@ -74,6 +74,30 @@ exports.generateCreateConcepts = function (createArray){
 
 }
 
+exports.generateSetQualias = function(setQualiasArray){
+  var collectionOfSetQualias = [];
+  for(var index in setQualiasArray){
+    var set = setQualiasArray[index];
+    var formattedStatement =
+    `SET ${set.concept_variable}.${set.db_key} = ${
+      exports.determineIfQuotesAreNeeded(set)}`;
+      collectionOfSetQualias.push(formattedStatement);
+  }
+  console.log(collectionOfSetQualias);
+  if(collectionOfSetQualias.length > 0){
+    return collectionOfSetQualias.join("");
+  }else{
+    return "";
+  }
+}
+exports.determineIfQuotesAreNeeded = function(value){
+  if(value.data_type==="text"){
+    return `"${value.new_value}"`;
+  }else{
+    return value.new_value;
+  }
+}
+
 exports.generateEntanglements= function (entanglementsArray){
   var collectionOfEntanglements = [];
 
@@ -101,7 +125,9 @@ exports.generateGuid = function(){
 }
 
 exports.compileDatabaseQuery = function (query){
+  console.log(query.set_qualias);
   var formattedQuery = `${exports.generateLoadVariables(query.load_variables)}
+    ${exports.generateSetQualias(query.set_qualias)}
     ${exports.generateCreateConcepts(query.create_concepts)}
     ${exports.generateEntanglements(query.create_entanglements)}`;
   return formattedQuery;

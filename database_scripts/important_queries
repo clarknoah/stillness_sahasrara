@@ -32,3 +32,13 @@ RETURN collect({
   creator:e.creator,
   source:source.label_name,
   target:target.label_name})
+
+***** Provides an Ordered list of how frequently I perceive things ******
+MATCH (user:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp:Experience)-[:best_maps_to]->(per:Perception)
+WHERE user.first_name = 'Noah'
+RETURN distinct count(per.display_name), per.display_name
+ORDER BY count(per.display_name) DESC
+
+***** Provides an ordered list of how many times meditations a perceptions shows up in *****
+
+***** Provides an

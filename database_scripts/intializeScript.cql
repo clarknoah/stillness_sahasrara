@@ -308,6 +308,22 @@ CREATE (s_display_name:Qualia{
 						default_value:'null'
 						})
 
+//Entanglement 					
+	CREATE (ent_mandatory_field:Qualia{
+						db_key:'mandatory_field',
+						display_name:'Mandatory Field?',
+						is_edittable:true,
+						mandatory_field:true,
+						has_multiple_values:false,
+						hint:'',
+						placeholder:'',
+						eq_type:'qualia',
+						select_options:[],
+						field_order:4,
+						data_type:'boolean',
+						default_value:false
+						})
+
 	CREATE (e_db_type:Qualia{
 			db_key:'db_type',
 			display_name:'Entanglement Type',
@@ -373,6 +389,7 @@ CREATE (s_display_name:Qualia{
 
 	CREATE (et_source:Entanglement{
 		db_type:'source_concept',
+		mandatory_field:true,
 		display_name:'Source Concept',
 		cardinality:'one-to-one',
 		creator:'source'
@@ -380,6 +397,7 @@ CREATE (s_display_name:Qualia{
 
 	CREATE (et_target:Entanglement{
 		db_type:'target_concept',
+		mandatory_field:true,
 		display_name:'Target Concept',
 		cardinality:'one-to-one',
 		creator:'source'
@@ -388,6 +406,7 @@ CREATE (s_display_name:Qualia{
 
 	CREATE (et_instance_of:Entanglement{
 		db_type:'instance_of',
+		mandatory_field:true,
 		display_name:'Instance Of',
 		cardinality:'one-to-one',
 		creator:'source'
@@ -396,6 +415,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (et_perceived:Entanglement{
 		db_type:'perceived',
 		display_name:'Perceived',
+		mandatory_field:true,
 		cardinality:'one-to-one',
 		creator:'source'
 		})
@@ -404,6 +424,7 @@ CREATE (s_display_name:Qualia{
 		db_type:'best_maps_to',
 		display_name:'Experiences Best Maps To',
 		cardinality:'one-to-one',
+		mandatory_field:false,
 		creator:'source'
 		})
 
@@ -436,6 +457,7 @@ CREATE (s_display_name:Qualia{
 		(s_description)<-[:approved_qualia]-(concept),
 		(s_number)<-[:approved_qualia]-(concept),
 		(s_display_name)<-[:approved_qualia]-(concept),
+		(ent_mandatory_field)<-[:approved_qualia]-(entanglement),
 		(e_db_type)<-[:approved_qualia]-(entanglement),
 		(e_display_name)<-[:approved_qualia]-(entanglement),
 		(e_cardinality)<-[:approved_qualia]-(entanglement),

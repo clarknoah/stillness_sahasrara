@@ -75,6 +75,7 @@ app.post('/getNewConceptForm',function(req,res){
 
 app.post('/submitFormPayload', function(req,res){
   var session = db.getSession();
+  console.log(req.body);
   console.log(db.compileDatabaseQuery(req.body));
   session
     .run(db.compileDatabaseQuery(req.body))
