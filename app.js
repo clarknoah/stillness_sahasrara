@@ -112,27 +112,44 @@ app.post('/getCentralDogmaConceptQualias', function(req,res){
 })
 
 app.post('/getExistingConceptForm',function(req,res){
-      console.log(req.body);
+    var templateConcept = model.conceptForms[req.body.conceptLabel];
       var session = db.getSession();
       session
-        .run(`MATCH (n) WHERE ID(n)=${req.body.id} RETURN n`)
+        //.run(`MATCH (concept) WHERE ID(concept)=${req.body.id} RETURN concept`)
+        .run(db.compileEntanglementRetrivalQuery(
+              req.body.id,
+              templateConcept.entanglements))
         .then(function(result){
             session.close();
-            console.log(result.records[0]);
             var concept = result.records[0]._fields[0];
-            var templateConcept = model.conceptForms[concept.labels[0]];
-            console.log(templateConcept);
+            result.records[0]._fields.splice(0,1);
+            entanglements = result.records[0]._fields;
+            for(var i in entanglements){
+              var entanglement = entanglements[i];
+              if(entanglement.display_name !== null){
+                console.log("not null");
+                console.log(entanglement);
+                templateConcept.entanglements[i]
+                .current_value = entanglement[0].concept_id.low;
+                templateConcept.entanglements[i]
+                .entanglement_id = entanglement[0].entanglement_id.low;
+                templateConcept.entanglements[i]
+                .current_display_name = entanglement[0].display_name;
+              }
+            }
+            console.log(templateConcept.entanglements);
             for(var qualiaKey in concept.properties){
-              console.log(qualiaKey);
               var qualiaIndex = utils.findElementIndex(
                 templateConcept.qualias,
                 qualiaKey
               );
-              console.log(qualiaIndex);
 
              templateConcept.qualias[qualiaIndex]
              .current_value = concept.properties[qualiaKey];
             }
+
+
+
             templateConcept.id = concept.identity.low;
             res.send(templateConcept);
         }

@@ -21,7 +21,7 @@ exports.setCurrentValue= function (qualia){
   return null;
 }
 
-exports.generateLoadVariables = function (variableArray){
+exports.generateLoadVariables = function (variableArray, entanglementArray){
   var matchStatement = "MATCH ";
   var whereStatement = "WHERE ";
   var collectionOfVariables = [];
@@ -30,6 +30,14 @@ exports.generateLoadVariables = function (variableArray){
   for(var index in variableArray){
     var concept = variableArray[index];
     var formattedVariable = `(${concept.key})`;
+    var formattedWhereStatement = `ID(${concept.key})=${concept.id}`
+    collectionOfVariables.push(formattedVariable);
+    collectionOfWhereStatements.push(formattedWhereStatement);
+  }
+
+  for(var index in entanglementArray){
+    var concept = entanglementArray[index];
+    var formattedVariable = `()-[${concept.key}]->()`;
     var formattedWhereStatement = `ID(${concept.key})=${concept.id}`
     collectionOfVariables.push(formattedVariable);
     collectionOfWhereStatements.push(formattedWhereStatement);
@@ -90,11 +98,28 @@ exports.generateSetQualias = function(setQualiasArray){
     return "";
   }
 }
+
 exports.determineIfQuotesAreNeeded = function(value){
   if(value.data_type==="text"){
     return `"${value.new_value}"`;
   }else{
     return value.new_value;
+  }
+}
+
+exports.generateDeleteEntanglements = function(entanglementsArray){
+  var collectionOfEntanglements = [];
+
+  for(var index in entanglementsArray){
+    var del = entanglementsArray[index];
+    console.log(del);
+    var formattedEntanglementStatement = `DELETE ${del.key} \n`;
+    collectionOfEntanglements.push(formattedEntanglementStatement);
+  }
+  if(entanglementsArray.length > 0){
+    return collectionOfEntanglements.join("");
+  }else{
+    return "";
   }
 }
 
@@ -124,10 +149,54 @@ exports.generateGuid = function(){
     s4() + '_' + s4() + s4() + s4();
 }
 
+exports.generateEntanglement
+
+exports.compileEntanglementRetrivalQuery = function(conceptId, entanglements){
+  var matchStatements = ['(concept)'];
+  var whereStatements = [];
+  var returnStatements = ['concept as concept'];
+
+  for(var i in entanglements){
+    var entanglement = entanglements[i];
+    entanglement.guid = exports.generateGuid();
+
+    if(entanglement.creator==="source")
+    {
+      var matchStatement = `(concept)-[${entanglement.guid}:${entanglement.db_type}]->(sc_${entanglement.guid})`;
+      var returnStatement = `collect({
+        display_name:sc_${entanglement.guid}.display_name,
+        concept_id:ID(sc_${entanglement.guid}),
+        entanglement_id:ID(${entanglement.guid})
+      }) as ${entanglement.db_type}`;
+      matchStatements.push(matchStatement);
+      returnStatements.push(returnStatement);
+    }
+    else if(entanglement.creator==="target")
+    {
+      var matchStatement = `(tc_${entanglement.guid})-[${entanglement.guid}:${entanglement.db_type}]->(concept)`;
+      var returnStatement = `collect({
+        display_name:sc_${entanglement.guid}.display_name,
+        concept_id:ID(tc_${entanglement.guid}),
+        entanglement_id:ID(${entanglement.guid})
+      }) as ${entanglement.db_type}`;
+      matchStatements.push(matchStatement);
+      returnStatements.push(returnStatement);
+    }
+  }
+  var fullQuery = `OPTIONAL MATCH
+  ${matchStatements.join(', \n ')}
+  WHERE ID(concept)=${conceptId}
+  RETURN ${returnStatements.join(',')}`;
+  console.log(fullQuery);
+  return fullQuery;
+
+}
+
 exports.compileDatabaseQuery = function (query){
   console.log(query.set_qualias);
-  var formattedQuery = `${exports.generateLoadVariables(query.load_variables)}
+  var formattedQuery = `${exports.generateLoadVariables(query.load_variables, query.load_entanglement_variables)}
     ${exports.generateSetQualias(query.set_qualias)}
+    ${exports.generateDeleteEntanglements(query.delete_entanglements)}
     ${exports.generateCreateConcepts(query.create_concepts)}
     ${exports.generateEntanglements(query.create_entanglements)}`;
   return formattedQuery;
