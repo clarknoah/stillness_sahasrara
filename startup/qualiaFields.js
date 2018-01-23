@@ -55,6 +55,7 @@ exports.getTargetConceptEntanglements = function(conceptLabel,creator){
     display_name:e.display_name,
     cardinality:e.cardinality,
     creator:e.creator,
+    is_editable:e.is_editable,
     source_concept:source.label_name,
     target_concept:target.label_name,
     target_key:null,
@@ -64,6 +65,7 @@ exports.getTargetConceptEntanglements = function(conceptLabel,creator){
       if(result.records[0]._fields[0].length>0){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
+          console.log(entanglement);
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
         }
       }
@@ -82,6 +84,7 @@ exports.getSourceConceptEntanglements = function(conceptLabel,creator){
     mandatory_field:e.mandatory_field,
     cardinality:e.cardinality,
     creator:e.creator,
+    is_editable:e.is_editable,
     display_name:e.display_name,
     source_concept:source.label_name,
     target_concept:target.label_name,
@@ -92,6 +95,7 @@ exports.getSourceConceptEntanglements = function(conceptLabel,creator){
       if(result.records[0]._fields[0].length>0){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
+          console.log(entanglement);
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
         }
       }
@@ -140,7 +144,7 @@ exports.getQualiaField = function() {
       db_key: {
         db_key: 'db_key',
         display_name: 'Qualia Database Key',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -154,7 +158,7 @@ exports.getQualiaField = function() {
       display_name: {
         db_key: 'display_name',
         display_name: 'Display Name',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -168,7 +172,7 @@ exports.getQualiaField = function() {
       is_edittable: {
         db_key: 'is_edittable',
         display_name: 'Edittable?',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -182,7 +186,7 @@ exports.getQualiaField = function() {
       mandatory_field: {
         db_key: 'mandatory_field',
         display_name: 'Mandatory Field?',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -196,7 +200,7 @@ exports.getQualiaField = function() {
       has_multiple_values: {
         db_key: 'has_multiple_values',
         display_name: 'Multiple Values?',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -210,7 +214,7 @@ exports.getQualiaField = function() {
       select_options: {
         db_key: 'select_options',
         display_name: 'Select Options',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: false,
         has_multiple_values: true,
         hint: '',
@@ -224,7 +228,7 @@ exports.getQualiaField = function() {
       field_order: {
         db_key: 'field_order',
         display_name: 'Field Order',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: false,
         hint: '',
@@ -238,7 +242,7 @@ exports.getQualiaField = function() {
       data_type: {
         db_key: 'data_type',
         display_name: 'Data Type',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: true,
         has_multiple_values: true,
         hint: '',
@@ -259,7 +263,7 @@ exports.getQualiaField = function() {
       default_value: {
         db_key: 'default_value',
         display_name: 'Default Value',
-        is_edittable: true,
+        is_editable: true,
         mandatory_field: false,
         has_multiple_values: false,
         hint: '',

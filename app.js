@@ -8,6 +8,7 @@ var model = require('./startup/qualiaFields')
 var utils = require('./utils');
 var moment = require('moment');
 var bodyParser = require('body-parser');
+var _ = require('lodash');
 const app = express();
 
 models.qualiaForms.loadForms();
@@ -24,6 +25,11 @@ var currentUser = {
 
 
 app.get('/', (req, res) => res.send('Hello World!'));
+
+app.get('/updateCentralDogma', (req, res) => {
+  model.getCentralDogmaLabels();
+  res.send('updated');
+});
 
 
 app.post('/getConceptList', function(req, res){
@@ -66,12 +72,12 @@ app.post('/getConceptQualiaList', function(req, res){
 });
 
 app.post('/getNewConceptForm',function(req,res){
+      console.log("Calling Get New Concept Form");
       var conceptLabel = req.body.conceptLabel;
-      var conceptForm = model.conceptForms[conceptLabel];
+      var conceptForm = _.cloneDeep(model.conceptForms[conceptLabel]);
+      console.log(conceptForm);
       res.send(conceptForm);
     })
-
-
 
 app.post('/submitFormPayload', function(req,res){
   var session = db.getSession();
@@ -112,7 +118,9 @@ app.post('/getCentralDogmaConceptQualias', function(req,res){
 })
 
 app.post('/getExistingConceptForm',function(req,res){
-    var templateConcept = model.conceptForms[req.body.conceptLabel];
+
+    let templateConcept =   _.cloneDeep(model.conceptForms[req.body.conceptLabel]);
+    console.log(templateConcept);
       var session = db.getSession();
       session
         //.run(`MATCH (concept) WHERE ID(concept)=${req.body.id} RETURN concept`)
@@ -158,7 +166,26 @@ app.post('/getExistingConceptForm',function(req,res){
     })
 
 
+app.post('/loginAtman',function(req,res){
+  var response = {
+    loginStatus:null,
+    currentAtman:null
+  };
+  var atman = req.body;
+  var user = "clarknoah";
+  var pass = "123";
 
+  if(user===atman.user && pass === atman.pass){
+    currentUser.username = atman.user;
+    currentUser.pass = atman.pass;
+     response.currentAtman = currentUser;
+    return res.send(response);
+  }else{
+    response.loginStatus = "failed";
+    response.message = "User or Pass is incorrect, try again";
+    return res.send(response);
+  }
+})
 
 
 

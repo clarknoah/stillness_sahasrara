@@ -54,7 +54,7 @@
 	CREATE (met_display_name:Qualia{
 		db_key:'display_name',
 		display_name:'Display Name',
-		is_edittable:true,
+		is_editable:true,
 		mandatory_field:true,
 		has_multiple_values:false,
 		hint:'',
@@ -69,7 +69,7 @@
 	CREATE (mei_display_name:Qualia{
 		db_key:'display_name',
 		display_name:'Display Name',
-		is_edittable:true,
+		is_editable:true,
 		mandatory_field:true,
 		has_multiple_values:false,
 		hint:'',
@@ -84,7 +84,7 @@
 	CREATE (exp_display_name:Qualia{
 		db_key:'display_name',
 		display_name:'Display Name',
-		is_edittable:true,
+		is_editable:true,
 		mandatory_field:true,
 		has_multiple_values:false,
 		hint:'',
@@ -99,7 +99,7 @@
 	CREATE (per_display_name:Qualia{
 		db_key:'display_name',
 		display_name:'Display Name',
-		is_edittable:true,
+		is_editable:true,
 		mandatory_field:true,
 		has_multiple_values:false,
 		hint:'',
@@ -114,7 +114,7 @@
 	CREATE (s_label_name:Qualia{
 						db_key:'label_name',
 						display_name:'Label Name',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -130,7 +130,7 @@
 CREATE (s_display_name:Qualia{
 					db_key:'display_name',
 					display_name:'Display Name',
-					is_edittable:true,
+					is_editable:true,
 					mandatory_field:true,
 					has_multiple_values:false,
 					hint:'',
@@ -146,7 +146,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (s_description:Qualia{
 						db_key:'description',
 						display_name:'Node Description',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -161,7 +161,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (s_number:Qualia{
 						db_key:'number',
 						display_name:'Number',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -176,7 +176,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_db_key:Qualia{
 						db_key:'db_key',
 						display_name:'Qualia Database Key',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -191,7 +191,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_display_name:Qualia{
 						db_key:'display_name',
 						display_name:'Display Name',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -203,10 +203,10 @@ CREATE (s_display_name:Qualia{
 						default_value:'null'
 						})
 
-	CREATE (p_is_edittable:Qualia{
-						db_key:'is_edittable',
-						display_name:'Edittable?',
-						is_edittable:true,
+	CREATE (p_is_editable:Qualia{
+						db_key:'is_editable',
+						display_name:'Editable?',
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -221,7 +221,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_mandatory_field:Qualia{
 						db_key:'mandatory_field',
 						display_name:'Mandatory Field?',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -236,7 +236,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_has_multiple_values:Qualia{
 						db_key:'has_multiple_values',
 						display_name:'Multiple Values?',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -251,7 +251,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_select_options:Qualia{
 						db_key:'select_options',
 						display_name:'Select Options',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:false,
 						has_multiple_values:true,
 						hint:'',
@@ -266,7 +266,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_field_order:Qualia{
 						db_key:'field_order',
 						display_name:'Field Order',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -281,7 +281,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_data_type:Qualia{
 						db_key:'data_type',
 						display_name:'Data Type',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:true,
 						hint:'',
@@ -296,7 +296,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (p_default_value:Qualia{
 						db_key:'default_value',
 						display_name:'Default Value',
-						is_edittable:true,
+						is_editable:true,
 						mandatory_field:false,
 						has_multiple_values:false,
 						hint:'',
@@ -308,11 +308,26 @@ CREATE (s_display_name:Qualia{
 						default_value:'null'
 						})
 
-//Entanglement 					
+//Entanglement
 	CREATE (ent_mandatory_field:Qualia{
 						db_key:'mandatory_field',
 						display_name:'Mandatory Field?',
-						is_edittable:true,
+						is_editable:true,
+						mandatory_field:true,
+						has_multiple_values:false,
+						hint:'',
+						placeholder:'',
+						eq_type:'qualia',
+						select_options:[],
+						field_order:4,
+						data_type:'boolean',
+						default_value:false
+						})
+
+	CREATE (e_is_editable:Qualia{
+						db_key:'is_editable',
+						display_name:'Is Editable?',
+						is_editable:true,
 						mandatory_field:true,
 						has_multiple_values:false,
 						hint:'',
@@ -327,7 +342,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (e_db_type:Qualia{
 			db_key:'db_type',
 			display_name:'Entanglement Type',
-			is_edittable:true,
+			is_editable:true,
 			mandatory_field:true,
 			has_multiple_values:false,
 			hint:'',
@@ -342,7 +357,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (e_display_name:Qualia{
 			db_key:'display_name',
 			display_name:'Display Name',
-			is_edittable:true,
+			is_editable:true,
 			mandatory_field:true,
 			has_multiple_values:false,
 			hint:'Whatever you want the Entanglement name to be displayed as',
@@ -357,7 +372,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (e_cardinality:Qualia{
 			db_key:'cardinality',
 			display_name:'Cardinality',
-			is_edittable:true,
+			is_editable:true,
 			mandatory_field:true,
 			has_multiple_values:false,
 			hint:'',
@@ -372,7 +387,7 @@ CREATE (s_display_name:Qualia{
 	CREATE (e_creator:Qualia{
 			db_key:'creator',
 			display_name:'Entanglement Creator',
-			is_edittable:true,
+			is_editable:true,
 			mandatory_field:true,
 			has_multiple_values:false,
 			hint:'Select which Concept should be responsible to make this Entanglement',
@@ -380,7 +395,7 @@ CREATE (s_display_name:Qualia{
 			eq_type:'qualia',
 			select_options:['source','target','both','independent'],
 			field_order:1,
-			data_type:'text_radio',
+			data_type:'text_select',
 			default_value:'null'
 			})
 
@@ -392,6 +407,7 @@ CREATE (s_display_name:Qualia{
 		mandatory_field:true,
 		display_name:'Source Concept',
 		cardinality:'one-to-one',
+		is_editable:true,
 		creator:'source'
 		})
 
@@ -399,6 +415,7 @@ CREATE (s_display_name:Qualia{
 		db_type:'target_concept',
 		mandatory_field:true,
 		display_name:'Target Concept',
+		is_editable:true,
 		cardinality:'one-to-one',
 		creator:'source'
 		})
@@ -409,6 +426,7 @@ CREATE (s_display_name:Qualia{
 		mandatory_field:true,
 		display_name:'Instance Of',
 		cardinality:'one-to-one',
+		is_editable:true,
 		creator:'source'
 		})
 
@@ -417,6 +435,7 @@ CREATE (s_display_name:Qualia{
 		display_name:'Perceived',
 		mandatory_field:true,
 		cardinality:'one-to-one',
+		is_editable:true,
 		creator:'source'
 		})
 
@@ -425,6 +444,7 @@ CREATE (s_display_name:Qualia{
 		display_name:'Experiences Best Maps To',
 		cardinality:'one-to-one',
 		mandatory_field:false,
+		is_editable:true,
 		creator:'source'
 		})
 
@@ -446,7 +466,7 @@ CREATE (s_display_name:Qualia{
 
 	CREATE (p_db_key)<-[:approved_qualia]-(qualia),
 		(p_display_name)<-[:approved_qualia]-(qualia),
-		(p_is_edittable)<-[:approved_qualia]-(qualia),
+		(p_is_editable)<-[:approved_qualia]-(qualia),
 		(p_mandatory_field)<-[:approved_qualia]-(qualia),
 		(p_has_multiple_values)<-[:approved_qualia]-(qualia),
 		(p_select_options)<-[:approved_qualia]-(qualia),
@@ -461,6 +481,7 @@ CREATE (s_display_name:Qualia{
 		(e_db_type)<-[:approved_qualia]-(entanglement),
 		(e_display_name)<-[:approved_qualia]-(entanglement),
 		(e_cardinality)<-[:approved_qualia]-(entanglement),
+		(e_is_editable)<-[:approved_qualia]-(entanglement),
 		(met_display_name)<-[:approved_qualia]-(meditation_type),
 		(mei_display_name)<-[:approved_qualia]-(meditation_instance),
 		(exp_display_name)<-[:approved_qualia]-(experience),

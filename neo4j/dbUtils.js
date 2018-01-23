@@ -175,7 +175,7 @@ exports.compileEntanglementRetrivalQuery = function(conceptId, entanglements){
     {
       var matchStatement = `(tc_${entanglement.guid})-[${entanglement.guid}:${entanglement.db_type}]->(concept)`;
       var returnStatement = `collect({
-        display_name:sc_${entanglement.guid}.display_name,
+        display_name:tc_${entanglement.guid}.display_name,
         concept_id:ID(tc_${entanglement.guid}),
         entanglement_id:ID(${entanglement.guid})
       }) as ${entanglement.db_type}`;
@@ -192,12 +192,31 @@ exports.compileEntanglementRetrivalQuery = function(conceptId, entanglements){
 
 }
 
+exports.generateArchiveConcepts = function(archiveArray){
+  var removeStatements = [];
+  var setStatements = [];
+  for(var index in archiveArray){
+    var archive = archiveArray[index];
+    var removeStatement = `REMOVE ${archive.variable}:${archive.label} \n `;
+    var setStatement = `SET ${archive.variable}:Archived_${archive.label} \n `;
+    removeStatements.push(removeStatement);
+    setStatements.push(setStatement);
+  }
+  var finArray = removeStatements.concat(setStatements);
+  if(archiveArray.length > 0){
+    return finArray.join("");
+  }else{
+    return "";
+  }
+}
+
 exports.compileDatabaseQuery = function (query){
   console.log(query.set_qualias);
   var formattedQuery = `${exports.generateLoadVariables(query.load_variables, query.load_entanglement_variables)}
-    ${exports.generateSetQualias(query.set_qualias)}
     ${exports.generateDeleteEntanglements(query.delete_entanglements)}
     ${exports.generateCreateConcepts(query.create_concepts)}
-    ${exports.generateEntanglements(query.create_entanglements)}`;
+    ${exports.generateEntanglements(query.create_entanglements)}
+    ${exports.generateArchiveConcepts(query.archive_concepts)}
+    ${exports.generateSetQualias(query.set_qualias)}`;
   return formattedQuery;
 }
