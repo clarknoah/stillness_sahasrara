@@ -135,8 +135,6 @@ app.post('/getExistingConceptForm',function(req,res){
             for(var i in entanglements){
               var entanglement = entanglements[i];
               if(entanglement.display_name !== null){
-                console.log("not null");
-                console.log(entanglement);
                 templateConcept.entanglements[i]
                 .current_value = entanglement[0].concept_id.low;
                 templateConcept.entanglements[i]
@@ -145,15 +143,17 @@ app.post('/getExistingConceptForm',function(req,res){
                 .current_display_name = entanglement[0].display_name;
               }
             }
-            console.log(templateConcept.entanglements);
             for(var qualiaKey in concept.properties){
               var qualiaIndex = utils.findElementIndex(
                 templateConcept.qualias,
                 qualiaKey
               );
-
-             templateConcept.qualias[qualiaIndex]
-             .current_value = concept.properties[qualiaKey];
+              console.log(templateConcept.qualias[qualiaIndex]);
+            if(templateConcept.qualias[qualiaIndex]!==undefined){
+               templateConcept
+               .qualias[qualiaIndex]
+               .current_value = concept.properties[qualiaKey];
+             }
             }
 
 
@@ -166,27 +166,56 @@ app.post('/getExistingConceptForm',function(req,res){
     })
 
 
-app.post('/loginAtman',function(req,res){
+app.post('/login',function(req,res){
+  console.log("Logging into Stillness!");
+  var user = req.body;
+
   var response = {
-    loginStatus:null,
+    loginSuccess:null,
+    message:null,
     currentAtman:null
   };
-  var atman = req.body;
-  var user = "clarknoah";
-  var pass = "123";
 
-  if(user===atman.user && pass === atman.pass){
-    currentUser.username = atman.user;
-    currentUser.pass = atman.pass;
-     response.currentAtman = currentUser;
-    return res.send(response);
-  }else{
-    response.loginStatus = "failed";
-    response.message = "User or Pass is incorrect, try again";
-    return res.send(response);
-  }
+  var session = db.getSession();
+  session
+    .run(`MATCH (user:Atman)
+    WHERE
+    user.username = '${user.username}' AND
+    user.password = '${user.password}'
+    RETURN user`)
+    .then(function(result){
+      session.close();
+        if(result.records.length > 0 ){
+          var atman = result.records[0]._fields[0];
+          currentUser = atman;
+          response.loginSuccess = true;
+          response.message = "Login Successful!";
+          response.currentAtman = atman;
+          res.send(response);
+        }else{
+          response.loginSuccess = false;
+          response.message = 'Either user does not exist, or password is incorrect.';
+          res.send(response);
+        }
+
+        console.log(concept);
+        res.send(result);
+    })
 })
 
+app.get('/logout',function(req,res){
+  console.log(currentUser);
+  var name = currentUser.properties.username;
+  console.log("Logging out of Stillness!");
+  currentUser = null;
+  console.log(currentUser);
+  var response = {
+    logoutSuccess:true,
+    message:`${name} has successfully logged out`,
+    currentAtman:null
+  };
+  res.send(response);
+})
 
 
 

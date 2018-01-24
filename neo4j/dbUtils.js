@@ -100,7 +100,7 @@ exports.generateSetQualias = function(setQualiasArray){
 }
 
 exports.determineIfQuotesAreNeeded = function(value){
-  if(value.data_type==="text"){
+  if(value.data_type==="text" || value.data_type === "date" || value.data_type === "text_select"){
     return `"${value.new_value}"`;
   }else{
     return value.new_value;

@@ -5,8 +5,8 @@ DELETE n,b
 
 ***** Deletes Existing Schema *****
 
-MATCH (n:Concept)-[e]-(q)
-DELETE n, e, q;
+MATCH (n:Concept), (e:Entanglement), (q:Qualia)
+DETACH DELETE n, e, q;
 
 
 MATCH (n:Concept)
