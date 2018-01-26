@@ -122,8 +122,8 @@ app.post('/getExistingConceptForm',function(req,res){
     let templateConcept =   _.cloneDeep(model.conceptForms[req.body.conceptLabel]);
     console.log(templateConcept);
       var session = db.getSession();
+      console.log(`Loading Existing Form for ${req.body.conceptLabel}`);
       session
-        //.run(`MATCH (concept) WHERE ID(concept)=${req.body.id} RETURN concept`)
         .run(db.compileEntanglementRetrivalQuery(
               req.body.id,
               templateConcept.entanglements))

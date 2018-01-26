@@ -209,7 +209,7 @@ CREATE (s_display_name:Qualia{
 						select_options:[],
 						field_order:7,
 						data_type:'number',
-						default_value:9999
+						default_value:null
 						})
 
 	CREATE (p_data_type:Qualia{
@@ -468,23 +468,33 @@ CREATE (s_display_name:Qualia{
 		creator:'source'
 		})
 
-	CREATE (et_target:Entanglement{
-		db_type:'target_concept',
-		mandatory_field:true,
-		display_name:'Target Concept',
-		is_editable:true,
-		cardinality:'one-to-one',
-		creator:'source'
-		})
+CREATE (et_target:Entanglement{
+			db_type:'target_concept',
+			mandatory_field:true,
+			display_name:'Target Concept',
+			is_editable:true,
+			cardinality:'one-to-one',
+			creator:'source'
+			})
+
+			CREATE (et_approved_qualia:Entanglement{
+				db_type:'approved_qualia',
+				mandatory_field:true,
+				display_name:'Approved Qualia',
+				is_editable:false,
+				cardinality:'one-to-one',
+				creator:'target'
+				})
 
 
 //Encapsulate Entanglements Assignments
 
 
 	CREATE
-	(et_target)<-[:approved_entanglement]-(entanglement),
 	(entanglement)<-[:source_concept]-(et_source),
 	(concept)<-[:target_concept]-(et_source),
+	(concept)<-[:source_concept]-(et_approved_qualia),
+	(qualia)<-[:target_concept]-(et_approved_qualia),
 	(entanglement)<-[:source_concept]-(et_target),
 	(concept)<-[:target_concept]-(et_target)
 
