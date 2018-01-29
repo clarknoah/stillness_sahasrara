@@ -96,6 +96,55 @@ app.post('/submitFormPayload', function(req,res){
 
 })
 
+assignFollowedBy = function(){
+  console.log("running followed by");
+  var session = db.getSession();
+
+  session
+    .run(`MATCH (experience)<-[:perceived]-(n:Meditation_Instance)-[:instance_of]->(b:Meditation_Type)
+RETURN DISTINCT ID(n), collect({time_on_timer: experience.time_on_timer, exp_id:ID(experience)})`)
+    .then(function(results){
+      var createArray = [];
+      var matchArray = [];
+      var whereArray = [];
+      for(var i in results.records){
+        var record = results.records[i];
+        console.log(`---------#${record._fields[0]}---------`);
+        for(var index in record._fields[1]){
+          record._fields[1][index].time_on_timer = record._fields[1][index].time_on_timer.low;
+          record._fields[1][index].exp_id = record._fields[1][index].exp_id.low;
+        }
+      record._fields[1] =  record._fields[1].sort(function(a,b){
+                  return a.time_on_timer - b.time_on_timer;
+                });
+      //  console.log(record._fields[1]);
+        if(record._fields[1].length > 1){
+          for(var setIndex = 1; setIndex < record._fields[1].length;  setIndex ++){
+            firstExp = record._fields[1][setIndex-1];
+            matchArray.push(`(var_${firstExp.exp_id}:Experience)`);
+            whereArray.push(`ID(var_${firstExp.exp_id})=${firstExp.exp_id}`);
+            secondExp=  record._fields[1][setIndex];
+            matchArray.push(`(var_${secondExp.exp_id}:Experience)`);
+            whereArray.push(`ID(var_${secondExp.exp_id})=${secondExp.exp_id}`);
+            createStatement = `(var_${firstExp.exp_id})-[:followed_by]->(var_${secondExp.exp_id})`;
+            createArray.push(createStatement);
+          }
+        }
+
+      }
+      matchArray = _.uniq(matchArray);
+      whereArray = _.uniq(whereArray);
+      createArray = _.uniq(createArray);
+      var finalQuery = `
+        MATCH ${matchArray.join(",")}
+        WHERE ${whereArray.join(" AND \n ")}
+        CREATE ${createArray.join(", \n ")}
+      `;
+      console.log(finalQuery);
+    })
+}
+
+
 app.post('/mockSubmitFormPayload', function(req,res){
   console.log(db.compileDatabaseQuery(req.body));
 });

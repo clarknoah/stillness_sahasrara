@@ -39,6 +39,16 @@ WHERE user.first_name = 'Noah'
 RETURN distinct count(per.display_name), per.display_name
 ORDER BY count(per.display_name) DESC
 
+***** Provides a list of what emotion follows the previous in count order *****
+MATCH (emotion:Perception)<-[:best_maps_to]-(experience2)<-[:followed_by]-(experience1:Experience)-[:best_maps_to]->(per1:Perception)
+WHERE per1.display_name = "self doubt"
+RETURN distinct emotion.display_name, count(experience2)
+ORDER BY count(experience2) DESC
+
 ***** Provides an ordered list of how many times meditations a perceptions shows up in *****
 
-***** Provides an
+***** Provides an ordered list of how man perceptions I experienced *****
+MATCH (user:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp:Experience)-[:best_maps_to]->(per:Perception)
+WHERE user.first_name = 'Noah'
+RETURN distinct ID(med), med.display_name, count(distinct exp)
+ORDER BY count(distinct exp) DESC
