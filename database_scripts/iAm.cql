@@ -293,6 +293,21 @@ WHERE atman.label_name = "Atman"
 		default_value:"null"
 		})
 
+    CREATE (exp_notes:Qualia{
+  		db_key:'notes',
+  		display_name:'Notes',
+  		is_editable:true,
+  		mandatory_field:false,
+  		has_multiple_values:false,
+  		hint:'',
+  		placeholder:'',
+  		eq_type:'qualia',
+  		select_options:[],
+  		field_order:1,
+  		data_type:'text',
+  		default_value:''
+  		})
+
     CREATE (exp_utc_timestamp_of_experience:Qualia{
     db_key:'utc_timestamp_of_experience',
     display_name:'Timestamp',

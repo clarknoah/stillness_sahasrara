@@ -11,6 +11,8 @@ var bodyParser = require('body-parser');
 var _ = require('lodash');
 const app = express();
 
+app.use(express.static(__dirname + '/dist'))
+
 models.qualiaForms.loadForms();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,7 +26,7 @@ var currentUser = {
 };
 
 
-app.get('/', (req, res) => res.send('Hello World!'));
+
 
 app.get('/updateCentralDogma', (req, res) => {
   model.getCentralDogmaLabels();
@@ -102,7 +104,7 @@ assignFollowedBy = function(){
 
   session
     .run(`MATCH (experience)<-[:perceived]-(n:Meditation_Instance)-[:instance_of]->(b:Meditation_Type)
-RETURN DISTINCT ID(n), collect({time_on_timer: experience.time_on_timer, exp_id:ID(experience)})`)
+    RETURN DISTINCT ID(n), collect({time_on_timer: experience.time_on_timer, exp_id:ID(experience)})`)
     .then(function(results){
       var createArray = [];
       var matchArray = [];
@@ -247,7 +249,7 @@ app.post('/login',function(req,res){
           res.send(response);
         }
 
-        console.log(concept);
+
         res.send(result);
     })
 })
@@ -267,7 +269,9 @@ app.get('/logout',function(req,res){
 })
 
 
-
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
 
 
 

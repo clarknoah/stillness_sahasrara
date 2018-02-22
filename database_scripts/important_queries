@@ -52,3 +52,8 @@ MATCH (user:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp
 WHERE user.first_name = 'Noah'
 RETURN distinct ID(med), med.display_name, count(distinct exp)
 ORDER BY count(distinct exp) DESC
+
+***** Provides an ordred list of the of all ALtered State Trackers and a collection of emotions perceived  *****
+
+MATCH (n:Atman)<-[:performed_by]-(track:Altered_State_Observer)<-[:part_of]-(inst:Meditation_Instance)-[:perceived]->(exp:Experience)-[:best_maps_to]->(p:Perception)
+RETURN distinct ID(track), n.display_name, track.date_of_ingestion, count(distinct inst), count(distinct exp), collect(p.display_name)
