@@ -1,6 +1,6 @@
 {
   "name": "stillness_sahasrara",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,11 @@
     "lodash": "^4.17.5",
     "moment": "^2.19.2",
     "neo4j-driver": "^1.5.0",
+    "passport-facebook": "^2.1.1",
     "type-of-is": "^3.5.1"
   },
   "devDependencies": {
+    "nodemon": "^1.17.1",
     "reload": "^2.2.2"
   }
 }

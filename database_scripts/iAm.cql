@@ -118,7 +118,7 @@ WHERE atman.label_name = "Atman"
     hint:'',
     placeholder:'',
     eq_type:'qualia',
-    select_options:['Psilocybin (pure)', 'Lysergic acid diethylamide (LSD)', 'Ayahuasca', 'Mescaline (pure)',  'N,N-DMT (pure)', '5-MeO-DMT (pure)', 'Psilocybe (dry)','Psilocybe (wet)'],
+    select_options:['Amphetamine Salts', 'Psilocybin (pure)', 'Lysergic acid diethylamide (LSD)', 'Ayahuasca', 'Mescaline (pure)',  'N,N-DMT (pure)', '5-MeO-DMT (pure)', 'Psilocybe (dry)','Psilocybe (wet)'],
     field_order:1,
     data_type:'text_select',
     default_value:null

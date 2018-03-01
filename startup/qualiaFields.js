@@ -65,7 +65,6 @@ exports.getTargetConceptEntanglements = function(conceptLabel,creator){
       if(result.records[0]._fields[0].length>0){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
-          console.log(entanglement);
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
         }
       }
@@ -95,7 +94,7 @@ exports.getSourceConceptEntanglements = function(conceptLabel,creator){
       if(result.records[0]._fields[0].length>0){
         for(var i in result.records[0]._fields[0]){
           var entanglement = result.records[0]._fields[0][i];
-          console.log(entanglement);
+
           exports.conceptForms[conceptLabel].entanglements.push(entanglement);
         }
       }

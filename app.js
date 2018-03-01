@@ -8,8 +8,20 @@ var model = require('./startup/qualiaFields')
 var utils = require('./utils');
 var moment = require('moment');
 var bodyParser = require('body-parser');
+var extracted = require('./extract');
 var _ = require('lodash');
+var path = require('path');
 const app = express();
+var https = require('https');
+var fs = require('fs');
+var passport = require('passport-facebook');
+
+
+var options = {
+   //ca: [fs.readFileSync(PATH_TO_BUNDLE_CERT_1), fs.readFileSync(PATH_TO_BUNDLE_CERT_2)],
+   cert: fs.readFileSync(__dirname+"/dev_certs/iam_dev.crt"),
+   key: fs.readFileSync(__dirname+"/dev_certs/iam_dev.pem")
+ };
 
 app.use(express.static(__dirname + '/dist'))
 
@@ -74,17 +86,27 @@ app.post('/getConceptQualiaList', function(req, res){
 });
 
 app.post('/getNewConceptForm',function(req,res){
-      console.log("Calling Get New Concept Form");
       var conceptLabel = req.body.conceptLabel;
       var conceptForm = _.cloneDeep(model.conceptForms[conceptLabel]);
-      console.log(conceptForm);
       res.send(conceptForm);
     })
 
+submitPayload = function(payload){
+  var session = db.getSession();
+  session
+    .run(db.compileDatabaseQuery(payload))
+    .then(function(result){
+      session.close();
+    //  console.log(result);
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+
+}
+
 app.post('/submitFormPayload', function(req,res){
   var session = db.getSession();
-  console.log(req.body);
-  console.log(db.compileDatabaseQuery(req.body));
   session
     .run(db.compileDatabaseQuery(req.body))
     .then(function(result){
@@ -99,7 +121,7 @@ app.post('/submitFormPayload', function(req,res){
 })
 
 assignFollowedBy = function(){
-  console.log("running followed by");
+
   var session = db.getSession();
 
   session
@@ -111,7 +133,7 @@ assignFollowedBy = function(){
       var whereArray = [];
       for(var i in results.records){
         var record = results.records[i];
-        console.log(`---------#${record._fields[0]}---------`);
+
         for(var index in record._fields[1]){
           record._fields[1][index].time_on_timer = record._fields[1][index].time_on_timer.low;
           record._fields[1][index].exp_id = record._fields[1][index].exp_id.low;
@@ -142,7 +164,7 @@ assignFollowedBy = function(){
         WHERE ${whereArray.join(" AND \n ")}
         CREATE ${createArray.join(", \n ")}
       `;
-      console.log(finalQuery);
+
     })
 }
 
@@ -171,9 +193,9 @@ app.post('/getCentralDogmaConceptQualias', function(req,res){
 app.post('/getExistingConceptForm',function(req,res){
 
     let templateConcept =   _.cloneDeep(model.conceptForms[req.body.conceptLabel]);
-    console.log(templateConcept);
+
       var session = db.getSession();
-      console.log(`Loading Existing Form for ${req.body.conceptLabel}`);
+
       session
         .run(db.compileEntanglementRetrivalQuery(
               req.body.id,
@@ -199,7 +221,7 @@ app.post('/getExistingConceptForm',function(req,res){
                 templateConcept.qualias,
                 qualiaKey
               );
-              console.log(templateConcept.qualias[qualiaIndex]);
+
             if(templateConcept.qualias[qualiaIndex]!==undefined){
                templateConcept
                .qualias[qualiaIndex]
@@ -259,7 +281,6 @@ app.get('/logout',function(req,res){
   var name = currentUser.properties.username;
   console.log("Logging out of Stillness!");
   currentUser = null;
-  console.log(currentUser);
   var response = {
     logoutSuccess:true,
     message:`${name} has successfully logged out`,
@@ -269,23 +290,17 @@ app.get('/logout',function(req,res){
 })
 
 
+
+app.get('/testurl', (req, res) => {
+  res.send("Hello World");
+});
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 reload(app);
+var server = https.createServer(options, app);
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+server.listen(3000, () => console.log('Example app listening on port 3000!'));

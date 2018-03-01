@@ -91,7 +91,7 @@ exports.generateSetQualias = function(setQualiasArray){
       exports.determineIfQuotesAreNeeded(set)}`;
       collectionOfSetQualias.push(formattedStatement);
   }
-  console.log(collectionOfSetQualias);
+
   if(collectionOfSetQualias.length > 0){
     return collectionOfSetQualias.join("");
   }else{
@@ -112,7 +112,7 @@ exports.generateDeleteEntanglements = function(entanglementsArray){
 
   for(var index in entanglementsArray){
     var del = entanglementsArray[index];
-    console.log(del);
+
     var formattedEntanglementStatement = `DELETE ${del.key} \n`;
     collectionOfEntanglements.push(formattedEntanglementStatement);
   }
@@ -187,7 +187,7 @@ exports.compileEntanglementRetrivalQuery = function(conceptId, entanglements){
   ${matchStatements.join(', \n ')}
   WHERE ID(concept)=${conceptId}
   RETURN ${returnStatements.join(',')}`;
-  console.log(fullQuery);
+
   return fullQuery;
 
 }
@@ -211,7 +211,7 @@ exports.generateArchiveConcepts = function(archiveArray){
 }
 
 exports.compileDatabaseQuery = function (query){
-  console.log(query.set_qualias);
+
   var formattedQuery = `${exports.generateLoadVariables(query.load_variables, query.load_entanglement_variables)}
     ${exports.generateDeleteEntanglements(query.delete_entanglements)}
     ${exports.generateCreateConcepts(query.create_concepts)}
