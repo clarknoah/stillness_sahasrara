@@ -12,7 +12,7 @@ var extracted = require('./extract');
 var _ = require('lodash');
 var path = require('path');
 const app = express();
-var https = require('https');
+//var https = require('https');
 var fs = require('fs');
 var passport = require('passport-facebook');
 
@@ -240,7 +240,7 @@ app.post('/getExistingConceptForm',function(req,res){
 
 
 app.post('/login',function(req,res){
-  console.log("Logging into Stillness!");
+  console.log("Logging into Stillness Verison 1!");
   var user = req.body;
 
   var response = {
@@ -301,6 +301,7 @@ app.get('*', (req, res) => {
 });
 
 reload(app);
-var server = https.createServer(options, app);
+//var server = https.createServer(options, app);
 
-server.listen(3000, () => console.log('Example app listening on port 3000!'));
+//server.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('Example app listening on port 3000!'));

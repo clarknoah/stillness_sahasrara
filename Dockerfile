@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+ADD start.sh /start.sh
+
 EXPOSE 3000
 
-CMD ["npm","start"]
+CMD ["/start.sh"]
