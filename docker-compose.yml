@@ -18,4 +18,4 @@ services:
       - $HOME/neo4j/logs:/logs
       - $HOME/neo4j/conf:/conf
     environment:
-      -NEO4J_AUTH=neo4j/stillness
+      - NEO4J_AUTH=neo4j/stillness
