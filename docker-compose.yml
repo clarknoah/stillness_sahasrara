@@ -4,10 +4,10 @@ services:
     image: clarknoah/stillness_sahasrara:v0.0.1
     depends_on:
       - "neo4j"
+    ports:
+     - "80:3000"
     links:
      - neo4j
-    ports:
-     - "3000:3000"
   neo4j:
     image: neo4j:latest
     ports:
