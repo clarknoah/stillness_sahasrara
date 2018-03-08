@@ -1,5 +1,5 @@
 var neoHost;
-var password = 'neo4j';
+var password = 'stillness';
 var env = process.env.NODE_ENV;
 console.log(env);
 if(env==='dev'){
