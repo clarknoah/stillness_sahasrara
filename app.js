@@ -14,7 +14,7 @@ var path = require('path');
 const app = express();
 //var https = require('https');
 var fs = require('fs');
-var passport = require('passport-facebook');
+
 
 
 var options = {
