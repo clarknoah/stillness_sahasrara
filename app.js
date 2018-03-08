@@ -29,6 +29,7 @@ models.qualiaForms.loadForms();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.limit('10mb'));
 
 var currentUser = {
   label:"Atman",

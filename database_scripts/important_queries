@@ -61,5 +61,20 @@ RETURN distinct ID(track), n.display_name, track.date_of_ingestion, count(distin
 ***** List out the meditations that users are working on  *****
 
 MATCH (n:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp:Experience)
-RETURN distinct n.display_name, med.date_of_meditation, med.display_name, count(distinct exp)
-ORDER BY med.date_of_meditation
+RETURN distinct n.display_name, ID(med), med.start_time, med.date_of_meditation, med.display_name, count(distinct exp)
+ORDER BY med.start_time
+
+
+***** This query accepts a user and emotion, and lists out over time which one they perceive the most
+MATCH (n:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp:Experience),
+(per1:Perception)<-[best_maps_to]-(exp)-[:followed_by]->(exp2:Experience)-[:best_maps_to]->(per2:Perception)
+WHERE n.first_name = "Noah" AND per1.display_name = "contentment"
+RETURN distinct per2.display_name, avg(exp2.utc_timestamp_of_experience-exp.utc_timestamp_of_experience)
+ORDER BY  avg(exp2.utc_timestamp_of_experience-exp.utc_timestamp_of_experience)
+
+***** What is the average distance between reported emotions? for all users ******
+
+***** How many experiences has a user reported? ******
+MATCH (n:Atman)<-[:performed_by]-(med:Meditation_Instance)-[:perceived]->(exp:Experience)
+WHERE n.first_name="Noah"
+RETURN count(distinct ex)
