@@ -9,5 +9,5 @@ cd $S_ROOT/scripts
 ./import_iam.sh
 cd $S_ROOT
 
-docker build -t clarknoah/stillness_sahasrara:v0.0.0 .
-docker push clarknoah/stillness_sahasrara:v0.0.0
+docker build -t clarknoah/stillness_sahasrara:v0.0.1 .
+docker push clarknoah/stillness_sahasrara:v0.0.1
